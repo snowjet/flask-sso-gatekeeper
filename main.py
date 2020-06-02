@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 def decode_token(auth_token):
 
-  SECRET_KEY = os.getenv("SECRET_KEY", "random key")
+  SECRET_KEY = os.getenv("SECRET_KEY", "random")
   payload = jwt.decode(auth_token, SECRET_KEY)
   
   return payload
