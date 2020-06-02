@@ -7,12 +7,31 @@ from flask import session
 from flask import url_for
 import json
 
+import jwt
+import os
+import sys
 
 app = Flask(__name__)
 
-@app.route('/')
+
+def decode_jwt(auth_token, aud):
+
+  try:
+    PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
+    aud = aud.split(",")
+    payload = jwt.decode(auth_token, PUBLIC_KEY, audience=aud)
+
+    return "verified"
+  except:
+    return "verification failed with - %s" % sys.exc_info()[0]
+
+
+@app.route("/")
 def index():
 
-  headers = dict(request.headers)
+    headers = dict(request.headers)
 
-  return jsonify(headers)
+    if "X-Auth-Token" in headers:
+         headers["payload_verified"] = decode_jwt(auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"])
+
+    return jsonify(headers)
