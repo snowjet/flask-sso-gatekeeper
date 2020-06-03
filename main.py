@@ -30,7 +30,9 @@ def requires_auth(f):
 def is_admin(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        userinfo = session["profile"]
+        headers = dict(request.headers)
+
+        headers['']
 
         return f(*args, **kwargs)
 
@@ -58,7 +60,7 @@ def index():
     if "X-Auth-Token" in headers:
          headers["payload_verified"] = decode_jwt(auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"])
 
-    return jsonify(session)
+    return jsonify(headers)
 
 
 @app.route("/admin")
