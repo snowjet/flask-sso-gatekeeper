@@ -61,7 +61,7 @@ def index():
     return jsonify(session)
 
 
-@app.router("/admin")
+@app.route("/admin")
 @is_admin
 def admin():
 
