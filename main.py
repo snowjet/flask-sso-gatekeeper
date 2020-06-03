@@ -34,30 +34,29 @@ def is_admin(f):
     def decorated(*args, **kwargs):
         headers = dict(request.headers)
 
-        if 'X-Auth-Groups' not in headers:
-          raise abort(403, description="Not an admin")
+        if "X-Auth-Groups" not in headers:
+            raise abort(403, description="Not an admin")
 
-        groups = headers['X-Auth-Groups'].split(",")
+        groups = headers["X-Auth-Groups"].split(",")
 
         if "admin" not in groups:
-          raise abort(403, description="Not an admin")
+            raise abort(403, description="Not an admin")
 
         return f(*args, **kwargs)
 
     return decorated
 
 
-
 def decode_jwt(auth_token, aud):
 
-  try:
-    PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
-    aud = aud.split(",")
-    payload = jwt.decode(auth_token, PUBLIC_KEY, audience=aud)
+    try:
+        PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
+        aud = aud.split(",")
+        payload = jwt.decode(auth_token, PUBLIC_KEY, audience=aud)
 
-    return "verified"
-  except:
-    return "verification failed with - %s" % sys.exc_info()[0]
+        return "verified"
+    except:
+        return "verification failed with - %s" % sys.exc_info()[0]
 
 
 @app.route("/")
@@ -66,7 +65,9 @@ def index():
     headers = dict(request.headers)
 
     if "X-Auth-Token" in headers:
-         headers["payload_verified"] = decode_jwt(auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"])
+        headers["payload_verified"] = decode_jwt(
+            auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"]
+        )
 
     return jsonify(headers)
 
@@ -78,6 +79,10 @@ def admin():
     headers = dict(request.headers)
 
     if "X-Auth-Token" in headers:
-         headers["payload_verified"] = decode_jwt(auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"])
+        headers["payload_verified"] = decode_jwt(
+            auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"]
+        )
+
+    headers["is_admin"] = True
 
     return jsonify(headers)
