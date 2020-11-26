@@ -58,15 +58,26 @@ def decode_jwt(auth_token, aud):
     except:
         return "verification failed with - %s" % sys.exc_info()[0]
 
+def decode_jwt(auth_token):
+
+    try:
+        PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
+        aud = aud.split(",")
+        payload = jwt.decode(auth_token, PUBLIC_KEY)
+
+        return "verified"
+    except:
+        return "verification failed with - %s" % sys.exc_info()[0]
+
 
 @app.route("/")
 def index():
 
     headers = dict(request.headers)
 
-    if "X-Auth-Token" in headers:
+    if "X-Forwarded-Access-Token" in headers:
         headers["payload_verified"] = decode_jwt(
-            auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"]
+            auth_token=headers["X-Forwarded-Access-Token"]
         )
 
     return jsonify(headers)
@@ -78,9 +89,9 @@ def admin():
 
     headers = dict(request.headers)
 
-    if "X-Auth-Token" in headers:
+    if "X-Forwarded-Access-Token" in headers:
         headers["payload_verified"] = decode_jwt(
-            auth_token=headers["X-Auth-Token"], aud=headers["X-Auth-Audience"]
+            auth_token=headers["X-Forwarded-Access-Token"]
         )
 
     headers["is_admin"] = True
