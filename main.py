@@ -51,7 +51,6 @@ def decode_jwt(auth_token):
 
     try:
         PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
-        aud = aud.split(",")
         payload = jwt.decode(auth_token, PUBLIC_KEY)
 
         return "verified"
