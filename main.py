@@ -47,11 +47,12 @@ def is_admin(f):
     return decorated
 
 
-def decode_jwt(auth_token):
+def decode_jwt(toekn):
 
     try:
         PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
-        payload = jwt.decode(auth_token, PUBLIC_KEY)
+        options={'verify_aud': False}
+        payload = jwt.decode(token, PUBLIC_KEY, options=options)
 
         return "verified"
     except:
