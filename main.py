@@ -47,7 +47,7 @@ def is_admin(f):
     return decorated
 
 
-def decode_jwt(toekn):
+def decode_jwt(token):
 
     try:
         PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
@@ -66,7 +66,7 @@ def index():
 
     if "X-Forwarded-Access-Token" in headers:
         headers["payload_verified"] = decode_jwt(
-            auth_token=headers["X-Forwarded-Access-Token"]
+            token=headers["X-Forwarded-Access-Token"]
         )
 
     return jsonify(headers)
@@ -80,7 +80,7 @@ def admin():
 
     if "X-Forwarded-Access-Token" in headers:
         headers["payload_verified"] = decode_jwt(
-            auth_token=headers["X-Forwarded-Access-Token"]
+            token=headers["X-Forwarded-Access-Token"]
         )
 
     headers["is_admin"] = True
