@@ -34,10 +34,10 @@ def is_admin(f):
     def decorated(*args, **kwargs):
         headers = dict(request.headers)
 
-        if "X-Auth-Groups" not in headers:
+        if "X-Forwarded-Groups" not in headers:
             raise abort(403, description="Not an admin")
 
-        groups = headers["X-Auth-Groups"].split(",")
+        groups = headers["X-Forwarded-Groups"].split(",")
 
         if "admin" not in groups:
             raise abort(403, description="Not an admin")
