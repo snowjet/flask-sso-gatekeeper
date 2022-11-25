@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/python-36 
+FROM registry.access.redhat.com/ubi9/python-39
 
 ENV PORT 8080
 EXPOSE 8080
