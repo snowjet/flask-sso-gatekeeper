@@ -52,7 +52,7 @@ def decode_jwt(token):
     try:
         PUBLIC_KEY = os.getenv("PUBLIC_KEY", "RSA Public Key")
         options={'verify_aud': False}
-        payload = jwt.decode(token, PUBLIC_KEY, options=options)
+        payload = jwt.decode(token, PUBLIC_KEY, algorithms=["RS256"], options=options)
 
         return "verified"
     except:
