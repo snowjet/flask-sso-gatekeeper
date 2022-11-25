@@ -86,8 +86,10 @@ def admin():
             token=headers["X-Forwarded-Access-Token"]
         )
 
-    headers["is_admin"] = True
+    admin_return = {}
+    admin_return["user"] = headers["X-Forwarded-Preferred-Username"]
+    admin_return["is_admin"] = True
 
-    json_format = json.dumps(headers, sort_keys = False, indent = 2)
+    json_format = json.dumps(admin_return, sort_keys = False, indent = 2)
  
     return render_template("index.html", json_format=json_format)
