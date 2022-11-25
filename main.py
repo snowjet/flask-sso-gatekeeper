@@ -69,7 +69,10 @@ def index():
             token=headers["X-Forwarded-Access-Token"]
         )
 
-    return jsonify(headers)
+    json_format = json.dumps(headers, sort_keys = False, indent = 2)
+ 
+    return render_template("index.html", json_format=json_format)
+
 
 
 @app.route("/admin")
@@ -85,4 +88,6 @@ def admin():
 
     headers["is_admin"] = True
 
-    return jsonify(headers)
+    json_format = json.dumps(headers, sort_keys = False, indent = 2)
+ 
+    return render_template("index.html", json_format=json_format)
